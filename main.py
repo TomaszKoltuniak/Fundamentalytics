@@ -22,7 +22,10 @@ if company is not None:
     st.write(ticker, cik_str)
 
     all_facts = get_company_facts(cik_str)
+    st.write(len(all_facts['facts'].keys()))
+    st.write(sorted(all_facts['facts'].keys()))
     for key, value in all_facts['facts'].items():
-        st.write('##' + value['label'])
-        st.write(value['unit'] + value['description'])
+        st.write('## ' + value['label'])
+        st.write(key)
+        st.write('[' + value['unit'] + '] ' + value['description'])
         st.dataframe(value['data'])

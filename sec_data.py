@@ -44,24 +44,21 @@ def get_company_facts(cik: str):
     facts = response['facts']['dei'] | response['facts']['us-gaap']
     
     for k, v in facts.items():
-        # date = []
-        # value = []
-        # for element in v['units'][str(list(v['units'].keys())[0])]:
-        #     if 'frame' in list(element.keys()) and element['form'] in ['10-Q', '10-K']:
-        #         date.append(str(element['fy']) + ' ' + element['fp'])
-        #         value.append(element['val'])
+        if k in ['WeightedAverageNumberOfSharesOutstandingBasic', 'WeightedAverageNumberOfDilutedSharesOutstanding',
+                 'Revenues', 'RevenueFromContractWithCustomerExcludingAssessedTax', 'OperatingIncomeLoss',
+                 'IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest',
+                 'IncomeTaxExpenseBenefit', 'NetIncomeLoss', 'CostOfGoodsAndServicesSold', 'CashAndCashEquivalentsAtCarryingValue',
+                 'CashCashEquivalentsAndShortTermInvestments', 'ResearchAndDevelopmentExpense', 'InventoryNet', 'AssetsCurrent',
+                 'StockholdersEquity', 'Assets', 'LiabilitiesCurrent', 'EarningsPerShareBasic','EarningsPerShareDiluted', 'Liabilities']:
+            
+            df = pd.DataFrame(v['units'][list(v['units'].keys())[0]])
 
-        # temp_df = pd.DataFrame({'date': date, 'value': value})
-        # temp_df = temp_df.sort_values(by=['date'])
-
-        df = pd.DataFrame(v['units'][list(v['units'].keys())[0]])
-
-        temp_dict = {
-            'label': v['label'],
-            'description': v['description'],
-            'unit': list(v['units'].keys())[0],
-            'data': df
-        }
-        result['facts'][k] = temp_dict
+            temp_dict = {
+                'label': v['label'],
+                'description': v['description'],
+                'unit': list(v['units'].keys())[0],
+                'data': df
+            }
+            result['facts'][k] = temp_dict
     del response
     return result
